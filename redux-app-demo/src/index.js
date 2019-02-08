@@ -1,19 +1,23 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import { createStore, combineReducers } from 'redux';
+import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import { Provider } from 'react-redux';
+import thunk from 'redux-thunk'
 
 import 'index.css';
 import App from 'components/App';
 import * as serviceWorker from './serviceWorker';
 
 function reducer(state = 9, action) {
+  console.log(action)
   switch (action.type) {
     case 'INCREMENT':
       return state + 1
     case 'DECREMENT':
       return state - 1
+    case 'INCREMENT3':
+      return state + action.payload
     default:
       return state
   }
@@ -29,8 +33,14 @@ function reducer2(state = 3, action) {
       return state
   }
 }
-
-const store = createStore(combineReducers({ reducer, reducer2 }), window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const store = createStore(
+  combineReducers(
+    { reducer, reducer2 }),
+  composeEnhancers(
+    applyMiddleware(thunk)
+  )
+);
 
 ReactDOM.render(<Provider store={store}><App /></Provider>, document.getElementById('root'));
 
