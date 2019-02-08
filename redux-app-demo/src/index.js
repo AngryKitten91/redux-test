@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import { createStore } from 'redux';
+import { createStore, combineReducers } from 'redux';
 import { Provider } from 'react-redux';
 
 import 'index.css';
@@ -19,7 +19,18 @@ function reducer(state = 9, action) {
   }
 }
 
-const store = createStore(reducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
+function reducer2(state = 3, action) {
+  switch (action.type) {
+    case 'INCREMENT2':
+      return state + 1
+    case 'DECREMENT2':
+      return state - 1
+    default:
+      return state
+  }
+}
+
+const store = createStore(combineReducers({ reducer, reducer2 }), window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 
 ReactDOM.render(<Provider store={store}><App /></Provider>, document.getElementById('root'));
 
