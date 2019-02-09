@@ -8,15 +8,31 @@ import './index.css';
 import App from 'components/App';
 import * as serviceWorker from './serviceWorker';
 
-function reducer(state = 10, action) {
+function reducer(state = [], action) {
 
-  const { type, payload: { value } = {} } = action
+  const { type, payload = {} } = action
 
   switch (type) {
-    case 'INCREMENT':
-      return state + value;
-    case 'DECREMENT':
-      return state - 1;
+    case 'ADD':
+      return [...state.slice(), payload];
+    case 'CHECK':
+      return state.map((e) => {
+        if (payload.name !== e.name) {
+          return e
+        }
+        return {
+          ...e,
+          checked: true,
+        }
+      })
+    case 'REMOVE':
+      return state.filter((e) => {
+        return e.name !== payload.name;
+      }).map((e) => {
+        return {
+          ...e
+        }
+      })
     default:
       return state;
   }

@@ -2,44 +2,101 @@ import React, { Component } from 'react';
 
 import { connect } from 'react-redux'
 
-const actionInc = { type: 'INCREMENT' };
-
-const createActionInc = (value = 0) => ({
-  type: 'INCREMENT',
+const createActionAdd = (name) => ({
+  type: 'ADD',
   payload: {
-    value
+    name,
+    checked: false,
   },
-})
-// const actionDec = { type: 'DECREMENT' };
+});
+
+const createActionCheck = (name) => ({
+  type: 'CHECK',
+  payload: {
+    name,
+  },
+});
+
+const createActionRemove = (name) => ({
+  type: 'REMOVE',
+  payload: {
+    name,
+  },
+});
 
 class App extends Component {
+  constructor(...props) {
+    super(...props);
+
+    this.state = {
+      inputValue: ''
+    }
+  }
+
+  handleChange = (event) => {
+    this.setState({
+      inputValue: event.target.value,
+    });
+  }
+
+  handleSubmit = (event) => {
+    event.preventDefault();
+
+    const { inputValue } = this.state;
+    const { add } = this.props;
+
+    inputValue && add(inputValue);
+  }
+
   render() {
-    const { reduxStore, increment } = this.props;
+    const { inputValue } = this.state;
+    const { list, check, remove } = this.props;
 
     return <div>
       <div>App</div>
-      <div>{reduxStore}</div>
-
-      <div onClick={() => {
-        increment(3)
-      }}>+3</div>
-      <div onClick={() => {
-        increment(5)
-      }}>+5</div>
-      <div onClick={() => {
-        increment(7)
-      }}>+7</div>
+      <div>
+        <form onSubmit={this.handleSubmit} action="">
+          <input
+            value={inputValue}
+            onChange={this.handleChange}
+            type="text" />
+          <button type="submit">
+            Add to the list
+          </button>
+        </form>
+      </div>
+      <table>
+        {list.map(({ name, checked }) => {
+          return <tr key={name}>
+            <td onClick={() => {
+              check(name)
+            }}>{name}</td>
+            <td>{checked.toString()}</td>
+            <td>
+              <div onClick={() => {
+                remove(name)
+              }}>remove</div>
+            </td>
+          </tr>
+        })}
+      </table>
     </div>
   }
 }
 
 const mapStateToProps = (state) => ({
-  reduxStore: state,
+  list: state,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  increment: (value) => {
-    dispatch(createActionInc(value));
+  add: (name) => {
+    dispatch(createActionAdd(name));
+  },
+  check: (name) => {
+    dispatch(createActionCheck(name));
+  },
+  remove: (name) => {
+    dispatch(createActionRemove(name));
   },
 });
 
