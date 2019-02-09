@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
+import Clicker from 'components/Clicker'
 
 class App extends Component {
   render() {
-    return (
-      <div>
-        <div>App</div>
-        <div></div>
-      </div>
-    );
+    return <div>
+      <Clicker />
+    </div>
   }
 }
 
