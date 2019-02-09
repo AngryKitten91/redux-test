@@ -9,9 +9,12 @@ import App from 'components/App';
 import * as serviceWorker from './serviceWorker';
 
 function reducer(state = 10, action) {
-  switch (action.type) {
+
+  const { type, payload: { value } = {} } = action
+
+  switch (type) {
     case 'INCREMENT':
-      return state + 1;
+      return state + value;
     case 'DECREMENT':
       return state - 1;
     default:
