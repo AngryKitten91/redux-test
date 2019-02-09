@@ -8,7 +8,7 @@ import './index.css';
 import App from 'components/App';
 import * as serviceWorker from './serviceWorker';
 
-function reducer(state = 0, action) {
+function reducer(state = 10, action) {
   switch (action.type) {
     case 'INCREMENT':
       return state + 1;
